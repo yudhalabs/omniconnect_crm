@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OmniConnect CRM</string>
+    <string name="notification_channel_name">OmniConnect CRM</string>
+    <string name="notification_channel_description">Notifications for OmniConnect CRM</string>
+</resources>
