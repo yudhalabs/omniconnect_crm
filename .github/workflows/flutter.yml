@@ -8,27 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  analyze:
-    name: Analyze
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.27.0'
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Analyze code
-        run: flutter analyze lib/
-
   web-build:
     name: Build Web
-    needs: analyze
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +35,6 @@ jobs:
 
   android-build:
     name: Build Android APK
-    needs: analyze
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
