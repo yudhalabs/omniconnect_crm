@@ -14,8 +14,6 @@ dependencies:
     sdk: flutter
 
   # Core
-  flutter_localizations:
-    sdk: flutter
   intl: ^0.18.1
   uuid: ^4.2.1
   shared_preferences: ^2.2.2
@@ -52,16 +50,9 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   crypto: ^3.0.3
   encrypt: ^5.0.3
-  local_auth: ^2.1.7
 
   # Extensions & Utils
   tuple: ^2.0.2
-  collection: ^1.18.0
-
-  # Firebase (Optional)
-  firebase_core: ^2.24.2
-  firebase_messaging: ^14.7.9
-  firebase_analytics: ^10.8.9
 
 dev_dependencies:
   flutter_test:
@@ -70,9 +61,6 @@ dev_dependencies:
   build_runner: ^2.4.7
   json_serializable: ^6.7.1
   mocktail: ^1.0.1
-  test: ^1.24.9
-  integration_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true

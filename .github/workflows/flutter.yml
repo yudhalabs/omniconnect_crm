@@ -14,12 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -38,12 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -65,7 +53,7 @@ jobs:
           retention-days: 7
 
   android-build:
-    name: Build Android
+    name: Build Android APK
     needs: analyze
     runs-on: ubuntu-latest
     steps:
@@ -95,83 +83,3 @@ jobs:
           name: android-apk
           path: build/app/outputs/apk/release/
           retention-days: 7
-
-  android-appbundle:
-    name: Build Android AppBundle
-    needs: analyze
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.27.0'
-          cache: true
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build Android AppBundle
-        run: flutter build appbundle --release
-
-      - name: Upload AppBundle artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-appbundle
-          path: build/app/outputs/bundle/release/
-          retention-days: 7
-
-  deploy-web:
-    name: Deploy Web to GitHub Pages
-    needs: web-build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    concurrency:
-      group: "pages"
-      cancel-in-progress: false
-    steps:
-      - name: Download web build
-        uses: actions/download-artifact@v4
-        with:
-          name: web-build
-          path: build/web
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/web
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-  notify:
-    name: Notify Build Status
-    needs: [web-build, android-build, android-appbundle]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Check status
-        run: |
-          if [[ "${{ needs.web-build.result }}" == "success" ]] && \
-             [[ "${{ needs.android-build.result }}" == "success" ]] && \
-             [[ "${{ needs.android-appbundle.result }}" == "success" ]]; then
-            echo "✅ All builds completed successfully!"
-          else
-            echo "❌ Some builds failed"
-            exit 1
-          fi
